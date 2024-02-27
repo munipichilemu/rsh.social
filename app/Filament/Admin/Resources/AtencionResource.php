@@ -107,16 +107,23 @@ class AtencionResource extends Resource
                 Tables\Columns\TextColumn::make('tramite.name')
                     ->label('Trámite realizado'),
                 Tables\Columns\TextColumn::make('sector.name')
-                    ->label('Sector'),
+                    ->label('Sector')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 PhoneColumn::make('phone')
                     ->label('Teléfono')
-                    ->displayFormat(PhoneInputNumberType::INTERNATIONAL),
+                    ->displayFormat(PhoneInputNumberType::INTERNATIONAL)
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('nationality')
                     ->label('Nacionalidad')
                     ->formatStateUsing(fn (string $state): string => (new Country('list'))->getList()[$state])
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label('Atendido el')
+                    ->date('d M Y')
+                    ->sortable(),
             ])
+            ->defaultSort('created_at', 'desc')
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
