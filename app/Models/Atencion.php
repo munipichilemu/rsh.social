@@ -24,6 +24,7 @@ class Atencion extends Model
         'phone',
         'nationality',
         'tramite_id',
+        'created_at',
     ];
 
     protected $casts = [
