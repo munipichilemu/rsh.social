@@ -2,16 +2,43 @@
 
 namespace App\Filament\Admin\Widgets;
 
+use App\Models\Atencion;
 use Filament\Widgets\ChartWidget;
+use Flowframe\Trend\Trend;
+use Flowframe\Trend\TrendValue;
+use Illuminate\Contracts\Support\Htmlable;
 
 class AtencionesDiarias extends ChartWidget
 {
-    protected static ?string $heading = 'Atenciones Diarias';
+    public function getHeading(): string|Htmlable|null
+    {
+        return 'Atenciones en '.ucwords(now()->translatedFormat('F Y'));
+    }
+
+    protected static ?int $sort = 2;
+
+    protected int|string|array $columnSpan = 'full';
+
+    protected static ?string $maxHeight = '300px';
 
     protected function getData(): array
     {
+        $trend = Trend::model(Atencion::class)
+            ->between(
+                start: now()->startOfMonth(),
+                end: now()->endOfMonth()
+            )
+            ->perDay()
+            ->count('created_at');
+
         return [
-            //
+            'datasets' => [
+                [
+                    'label' => ucwords(now()->translatedFormat('F Y')),
+                    'data' => $trend->map(fn (TrendValue $value) => $value->aggregate),
+                ],
+            ],
+            'labels' => $trend->map(fn (TrendValue $value) => $value->date),
         ];
     }
 
