@@ -29,6 +29,13 @@ class TramiteResource extends Resource
                     ->required(),
                 Forms\Components\MarkdownEditor::make('description')
                     ->label('Descripción')
+                    ->disableToolbarButtons([
+                        'attachFiles',
+                        'blockquote',
+                        'codeBlock',
+                        'heading',
+                        'table',
+                    ])
                     ->columnSpanFull(),
             ]);
     }
