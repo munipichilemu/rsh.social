@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('sectores', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->enum('group', ['urbano', 'rural']);
+            $table->enum('group', ['urbano', 'rural', 'otro']);
             $table->timestamps();
             $table->softDeletes();
         });

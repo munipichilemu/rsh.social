@@ -100,5 +100,10 @@ class SectorSeeder extends Seeder
             ['name' => 'Tanumé', 'group' => 'rural', 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'Villa Esperanza', 'group' => 'rural', 'created_at' => now(), 'updated_at' => now()],
         ]);
+
+        /* Otros */
+        Sector::insert([
+            ['name' => 'Otro', 'group' => 'otro', 'created_at' => now(), 'updated_at' => now()],
+        ]);
     }
 }
