@@ -33,65 +33,87 @@ class AtencionResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make([
-                    Forms\Components\TextInput::make('rut')
-                        ->label('RUT')
-                        ->rules(['rut'])
-                        ->live(onBlur: true)
-                        ->afterStateUpdated(fn (Set $set, ?string $state) => $set('rut', Rut::parse($state)->format()))
-                        ->formatStateUsing(fn (?string $state): string => $state ?? '')
-                        ->disabled(fn (string $context): bool => $context === 'edit')
-                        ->validationAttribute('rut')
-                        ->required(),
+                Forms\Components\Section::make('Datos del beneficiario')
+                    ->description('Datos básicos de identificación del beneficiario')
+                    ->schema([
+                        Forms\Components\TextInput::make('rut')
+                            ->label('RUT')
+                            ->rules(['rut'])
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(fn (Set $set, ?string $state) => $set('rut', Rut::parse($state)->format()))
+                            ->formatStateUsing(fn (?string $state): string => $state ?? '')
+                            ->disabled(fn (string $context): bool => $context === 'edit')
+                            ->validationAttribute('rut')
+                            ->required(),
 
-                    Forms\Components\TextInput::make('names')
-                        ->label('Nombres')
-                        ->columnStart(1)
-                        ->required(),
-                    Forms\Components\TextInput::make('lastname_1')
-                        ->label('Primer Apellido')
-                        ->required(),
-                    Forms\Components\TextInput::make('lastname_2')
-                        ->label('Segundo Apellido'),
+                        Forms\Components\TextInput::make('names')
+                            ->label('Nombres')
+                            ->columnStart(1)
+                            ->required(),
+                        Forms\Components\TextInput::make('lastname_1')
+                            ->label('Primer Apellido')
+                            ->required(),
+                        Forms\Components\TextInput::make('lastname_2')
+                            ->label('Segundo Apellido'),
 
-                    Country::make('nationality')
-                        ->label('Nacionalidad')
-                        ->default('CL')
-                        ->searchable()
-                        ->required(),
-                    PhoneInput::make('phone')
-                        ->defaultCountry('CL')
-                        ->disallowDropdown()
-                        ->showSelectedDialCode(true)
-                        ->inputNumberFormat(PhoneInputNumberType::E164)
-                        ->formatAsYouType(),
-                    Forms\Components\Select::make('sector_id')
-                        ->label('Sector')
-                        ->relationship('sector', 'name')
-                        ->searchable()
-                        ->options(
-                            Sector::all()
-                                ->groupBy('group')
-                                ->map(fn ($group) => $group->mapWithKeys(fn ($item) => [$item['id'] => $item['name']]))
-                                ->mapWithKeys(fn ($item, $key) => [ucfirst($key) => $item]))
-                        ->preload()
-                        ->nullable()
-                        ->required(),
-                ])->columns(3),
+                        Country::make('nationality')
+                            ->label('Nacionalidad')
+                            ->default('CL')
+                            ->searchable()
+                            ->required(),
+                        PhoneInput::make('phone')
+                            ->defaultCountry('CL')
+                            ->disallowDropdown()
+                            ->showSelectedDialCode(true)
+                            ->inputNumberFormat(PhoneInputNumberType::E164)
+                            ->formatAsYouType(),
 
-                Forms\Components\Section::make([
-                    Forms\Components\Select::make('tramite_id')
-                        ->label('Tramite realizado')
-                        ->columnSpan(2)
-                        ->relationship('tramite', 'name')
-                        ->searchable()
-                        ->preload()
-                        ->nullable()
-                        ->required(),
-                    Forms\Components\DatePicker::make('created_at')
-                        ->label('Fecha atención')
-                        ->maxDate(today()),
-                ])->columns(3),
+                        Forms\Components\Textarea::make('address')
+                            ->label('Dirección')
+                            ->columnSpan(2)
+                            ->rows(3)
+                            ->required(),
+                        Forms\Components\Select::make('sector_id')
+                            ->label('Sector')
+                            ->relationship('sector', 'name')
+                            ->searchable()
+                            ->options(
+                                Sector::all()
+                                    ->groupBy('group')
+                                    ->map(fn ($group) => $group->mapWithKeys(fn ($item) => [$item['id'] => $item['name']]))
+                                    ->mapWithKeys(fn ($item, $key) => [ucfirst($key) => $item]))
+                            ->preload()
+                            ->nullable()
+                            ->required(),
+                    ])
+                    ->columns(3),
+
+                Forms\Components\Section::make('Detalles de atención')
+                    ->description('Trámites realizados durante la sesión de atención')
+                    ->schema([
+                        Forms\Components\Select::make('tramite_id')
+                            ->label('Tramite realizado')
+                            ->columnSpan(2)
+                            ->relationship('tramite', 'name')
+                            ->searchable()
+                            ->preload()
+                            ->nullable()
+                            ->required(),
+                        Forms\Components\DatePicker::make('created_at')
+                            ->label('Fecha atención')
+                            ->maxDate(today()),
+                        Forms\Components\MarkdownEditor::make('annotations')
+                            ->label('Notas')
+                            ->disableToolbarButtons([
+                                'attachFiles',
+                                'blockquote',
+                                'codeBlock',
+                                'heading',
+                                'table',
+                            ])
+                            ->columnSpanFull(),
+                    ])
+                    ->columns(3),
             ]);
     }
 

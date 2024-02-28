@@ -17,10 +17,12 @@ return new class extends Migration
             $table->string('names');
             $table->string('lastname_1');
             $table->string('lastname_2')->nullable();
+            $table->text('address');
             $table->foreignId('sector_id');
             $table->string('phone')->nullable();
             $table->string('nationality')->default('CL');
             $table->foreignId('tramite_id');
+            $table->text('annotations')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
