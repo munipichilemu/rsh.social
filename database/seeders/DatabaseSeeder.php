@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             SectorSeeder::class,
             TramiteSeeder::class,
+            ShieldSeeder::class,
         ]);
 
         /* Usuario desarrollador */
@@ -32,6 +33,7 @@ class DatabaseSeeder extends Seeder
                 'remember_token' => 'j27O18VY00rkbav5nukKeO0aBFUhxHUNdGqGk1cs48qSWUgYTFUlHRPtZCuX',
             ]);
 
+            $dev->assignRole('super_admin');
             $this->command->info('  Developer user created.');
         }
     }

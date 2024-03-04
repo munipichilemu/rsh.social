@@ -39,6 +39,9 @@ class AdminPanelProvider extends PanelProvider
             ->pages([
                 Pages\Dashboard::class,
             ])
+            ->plugins([
+                FilamentShieldPlugin::make(),
+            ])
             ->discoverWidgets(in: app_path('Filament/Admin/Widgets'), for: 'App\\Filament\\Admin\\Widgets')
             ->middleware([
                 EncryptCookies::class,
