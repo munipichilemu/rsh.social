@@ -20,10 +20,12 @@ class Atencion extends Model
         'names',
         'lastname_1',
         'lastname_2',
+        'address',
         'sector_id',
         'phone',
         'nationality',
         'tramite_id',
+        'annotations',
         'created_at',
     ];
 
