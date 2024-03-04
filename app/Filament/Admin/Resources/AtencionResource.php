@@ -40,7 +40,7 @@ class AtencionResource extends Resource
                             ->label('RUT')
                             ->rules(['rut'])
                             ->live(onBlur: true)
-                            ->afterStateUpdated(fn (Set $set, ?string $state) => $set('rut', Rut::parse($state)->format()))
+                            ->afterStateUpdated(fn (Set $set, ?string $state) => strlen($state) > 3 ? $set('rut', Rut::parse($state)->format()) : $state)
                             ->formatStateUsing(fn (?string $state): string => $state ?? '')
                             ->disabled(fn (string $context): bool => $context === 'edit')
                             ->validationAttribute('rut')
