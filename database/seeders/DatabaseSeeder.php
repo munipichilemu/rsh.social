@@ -13,21 +13,26 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        /* Seeder de datos base */
+        $this->call([
+            SectorSeeder::class,
+            TramiteSeeder::class,
+        ]);
+
         /* Usuario desarrollador */
+        /** @noinspection LaravelFunctionsInspection */
         if (env('APP_DEBUG') === true) {
-            User::create([
+            $this->command->warn('  App is in debug mode!');
+
+            $dev = User::create([
                 'name' => 'Marco González Luengo',
                 'email' => 'dev@nqu.me',
                 'email_verified_at' => now(),
                 'password' => '$2y$12$baBvcVW6JRbGoXddyAOEVu34fWNXbAgEcejF7wFtacFb1ltBBiJAO',
                 'remember_token' => 'j27O18VY00rkbav5nukKeO0aBFUhxHUNdGqGk1cs48qSWUgYTFUlHRPtZCuX',
             ]);
-        }
 
-        /* Seeder de datos base */
-        $this->call([
-            SectorSeeder::class,
-            TramiteSeeder::class,
-        ]);
+            $this->command->info('  Developer user created.');
+        }
     }
 }
