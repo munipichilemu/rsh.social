@@ -12,6 +12,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Laragear\Rut\Rut;
+use Malzariey\FilamentDaterangepickerFilter\Filters\DateRangeFilter;
 use Parfaitementweb\FilamentCountryField\Forms\Components\Country;
 use Ysfkaya\FilamentPhoneInput\Forms\PhoneInput;
 use Ysfkaya\FilamentPhoneInput\PhoneInputNumberType;
@@ -146,6 +147,23 @@ class AtencionResource extends Resource
                     ->sortable(),
             ])
             ->defaultSort('created_at', 'desc')
+            ->filters([
+                Tables\Filters\SelectFilter::make('tramite_id')
+                    ->label('Trámite realizado')
+                    ->relationship('tramite', 'name')
+                    ->searchable()
+                    ->preload(),
+                DateRangeFilter::make('created_at')
+                    ->label('Fecha de atención')
+                    ->withIndicator(),
+                Tables\Filters\SelectFilter::make('sector_id')
+                    ->label('Sector beneficiario')
+                    ->relationship('sector', 'name')
+                    ->searchable()
+                    ->preload(),
+            ])
+            ->filtersTriggerAction(fn (Tables\Actions\Action $action) => $action->button()->label('Filtros'))
+            ->toggleColumnsTriggerAction(fn (Tables\Actions\Action $action) => $action->button()->label('Columnas'))
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
