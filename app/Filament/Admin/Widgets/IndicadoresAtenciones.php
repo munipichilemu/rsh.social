@@ -10,6 +10,20 @@ class IndicadoresAtenciones extends BaseWidget
 {
     protected static ?int $sort = 1;
 
+    /**
+     * @param \Illuminate\Support\Collection $current_year
+     * @param \Illuminate\Support\Collection $previous_year
+     * @return float|int
+     */
+    public function calculateYearlyVariation(\Illuminate\Support\Collection $current_year, \Illuminate\Support\Collection $previous_year): int|float
+    {
+        if ($previous_year->first()->aggregate < 1) {
+            return $current_year->first()->aggregate / 1;
+        }
+
+        return $current_year->first()->aggregate / $previous_year->first()->aggregate - 1;
+    }
+
     protected function getStats(): array
     {
         $current_year = Trend::model(Atencion::class)
@@ -30,7 +44,7 @@ class IndicadoresAtenciones extends BaseWidget
 
         $variation_percentage = sprintf(
             '%+.2f',
-            ($current_year->first()->aggregate / $previous_year->first()->aggregate - 1) * 100
+            ($this->calculateYearlyVariation($current_year, $previous_year)) * 100
         );
 
         $tramites_ranking = Atencion::select('tramite_id', \DB::raw('count(*) as total'))
